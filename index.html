@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Неделя роста — план для блогера</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f12;
+      --surface: #1a1a22;
+      --surface-2: #24242f;
+      --accent: #ff6b4a;
+      --accent-2: #7c5cff;
+      --text: #f4f4f8;
+      --muted: #9a9ab0;
+      --border: rgba(255, 255, 255, 0.08);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Manrope", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .glow {
+      position: fixed;
+      width: 480px;
+      height: 480px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-1 { top: -120px; left: -80px; background: var(--accent); }
+    .glow-2 { bottom: -100px; right: -60px; background: var(--accent-2); }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+    }
+
+    header {
+      margin-bottom: 48px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent);
+      background: rgba(255, 107, 74, 0.12);
+      border: 1px solid rgba(255, 107, 74, 0.25);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 540px;
+    }
+
+    section {
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2 span {
+      font-size: 1.5rem;
+    }
+
+    .ideas {
+      display: grid;
+      gap: 14px;
+    }
+
+    .idea-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .idea-card:hover {
+      border-color: rgba(255, 107, 74, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .idea-num {
+      font-family: "JetBrains Mono", monospace;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--accent);
+      background: rgba(255, 107, 74, 0.15);
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .idea-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .idea-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .plan {
+      display: grid;
+      gap: 12px;
+    }
+
+    .day {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .day-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: var(--surface-2);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .day-label {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .day-tag {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      color: var(--accent-2);
+      background: rgba(124, 92, 255, 0.15);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .day ul {
+      list-style: none;
+      padding: 16px 20px 18px;
+    }
+
+    .day li {
+      position: relative;
+      padding-left: 22px;
+      margin-bottom: 10px;
+      font-size: 0.95rem;
+      color: var(--text);
+    }
+
+    .day li:last-child {
+      margin-bottom: 0;
+    }
+
+    .day li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.55em;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    }
+
+    footer {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    @media (max-width: 520px) {
+      .wrap { padding: 32px 16px 60px; }
+      .day-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow glow-1" aria-hidden="true"></div>
+  <div class="glow glow-2" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <p class="badge">7 дней · реальный план</p>
+      <h1>Как привлечь аудиторию за одну неделю</h1>
+      <p class="subtitle">Пять рабочих идей и пошаговый контент-план — без «просто будь собой» и магии алгоритма.</p>
+    </header>
+
+    <section aria-labelledby="ideas-heading">
+      <h2 id="ideas-heading"><span>💡</span> 5 идей для блогера</h2>
+      <div class="ideas">
+        <article class="idea-card">
+          <div class="idea-num">01</div>
+          <div>
+            <h3>Серия «7 дней — 7 инсайтов»</h3>
+            <p>Каждый день один короткий пост с конкретным советом по вашей нише. Люди возвращаются за продолжением, а алгоритм видит стабильную активность.</p>
+          </div>
+        </article>
+        <article class="idea-card">
+          <div class="idea-num">02</div>
+          <div>
+            <h3>Коллаборация с микроблогером</h3>
+            <p>Найдите автора с похожей аудиторией (5–50 тыс. подписчиков): совместный эфир, взаимный репост или челлендж. Охват удваивается без бюджета на рекламу.</p>
+          </div>
+        </article>
+        <article class="idea-card">
+          <div class="idea-num">03</div>
+          <div>
+            <h3>Интерактив: опрос + разбор ответов</h3>
+            <p>Сторис или пост с вопросом «Что вам сложнее всего?» — на следующий день видео/пост с разбором топ-3 ответов. Аудитория чувствует, что её слышат.</p>
+          </div>
+        </article>
+        <article class="idea-card">
+          <div class="idea-num">04</div>
+          <div>
+            <h3>Лид-магнит за подписку</h3>
+            <p>Чек-лист, шаблон или мини-гайд в обмен на email или подписку в Telegram. Один полезный файл — и вы собираете базу, а не только лайки.</p>
+          </div>
+        </article>
+        <article class="idea-card">
+          <div class="idea-num">05</div>
+          <div>
+            <h3>Живой эфир + нарезки</h3>
+            <p>Один эфир на 30–45 минут в середине недели, потом 3–5 коротких клипов с лучшими моментами. Один контент — несколько форматов.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section aria-labelledby="plan-heading">
+      <h2 id="plan-heading"><span>📅</span> Контент-план на 7 дней</h2>
+      <div class="plan">
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 1 — Понедельник</span>
+            <span class="day-tag">Запуск серии</span>
+          </div>
+          <ul>
+            <li>Пост-крючок: «7 дней — 7 способов [тема вашей ниши]»</li>
+            <li>Сторис: опрос «Какая тема вам важнее?» (2–3 варианта)</li>
+            <li>Ответить на 10–15 комментариев у коллег по нише — видимость</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 2 — Вторник</span>
+            <span class="day-tag">Ценность</span>
+          </div>
+          <ul>
+            <li>Пост №1 серии: один практический совет + пример</li>
+            <li>Короткое видео/Reels с тем же советом (30–60 сек)</li>
+            <li>Закрепить в профиле ссылку на лид-магнит (если готов)</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 3 — Среда</span>
+            <span class="day-tag">Вовлечение</span>
+          </div>
+          <ul>
+            <li>Пост №2 серии + карусель «до/после» или «ошибка → решение»</li>
+            <li>Сторис: вопрос «Что вам мешает больше всего?» — собрать ответы</li>
+            <li>Написать 3 микроблогерам с предложением коллаба (шаблон в DM)</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 4 — Четверг</span>
+            <span class="day-tag">Разбор</span>
+          </div>
+          <ul>
+            <li>Пост: разбор топ-ответов из опроса (день 1 и 3)</li>
+            <li>Сторис: «спасибо за ответы» + тизер эфира завтра</li>
+            <li>Анонс лид-магнита: «Завтра в эфире разберу + дам чек-лист»</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 5 — Пятница</span>
+            <span class="day-tag">Эфир</span>
+          </div>
+          <ul>
+            <li>Живой эфир 30–45 мин: Q&A + презентация лид-магнита</li>
+            <li>Пост №3 серии — итоги первой половины недели</li>
+            <li>После эфира: пост «5 главных мыслей с эфира» + ссылка на запись</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 6 — Суббота</span>
+            <span class="day-tag">Нарезки</span>
+          </div>
+          <ul>
+            <li>3–5 коротких клипов с лучших моментов эфира</li>
+            <li>Пост №4 серии + призыв скачать лид-магнит</li>
+            <li>Репост/сторис коллаборатора (если договорились на среду)</li>
+          </ul>
+        </article>
+
+        <article class="day">
+          <div class="day-header">
+            <span class="day-label">День 7 — Воскресенье</span>
+            <span class="day-tag">Итоги</span>
+          </div>
+          <ul>
+            <li>Пост №5–7 серии: финальный совет + «что дальше»</li>
+            <li>Итоговый пост: цифры недели (охват, подписки, отклики) — честно</li>
+            <li>Сторис: «Спасибо за неделю» + опрос «О чём писать дальше?»</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      Открой <code style="color: var(--accent);">index.html</code> в браузере — и вперёд, пока мотивация не ушла пить кофе.
+    </footer>
+  </div>
+</body>
+</html>
