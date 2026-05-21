@@ -45,8 +45,24 @@
       z-index: 0;
     }
 
-    .glow-1 { top: -120px; left: -80px; background: var(--accent); }
-    .glow-2 { bottom: -100px; right: -60px; background: var(--accent-2); }
+    .glow-1 {
+      top: -120px;
+      left: -80px;
+      background: var(--accent);
+      animation: float-glow 14s ease-in-out infinite;
+    }
+
+    .glow-2 {
+      bottom: -100px;
+      right: -60px;
+      background: var(--accent-2);
+      animation: float-glow 18s ease-in-out infinite reverse;
+    }
+
+    @keyframes float-glow {
+      0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.35; }
+      50% { transform: translate(40px, 30px) scale(1.08); opacity: 0.45; }
+    }
 
     .wrap {
       position: relative;
@@ -62,6 +78,7 @@
 
     .badge {
       display: inline-block;
+      animation: pulse-badge 3s ease-in-out infinite;
       font-family: "JetBrains Mono", monospace;
       font-size: 0.75rem;
       font-weight: 500;
@@ -104,11 +121,46 @@
 
     h2 span {
       font-size: 1.5rem;
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    h2:hover span {
+      transform: scale(1.15) rotate(8deg);
     }
 
     .ideas {
       display: grid;
       gap: 14px;
+    }
+
+    .ideas .idea-card.reveal:nth-child(1) { transition-delay: 0.05s; }
+    .ideas .idea-card.reveal:nth-child(2) { transition-delay: 0.1s; }
+    .ideas .idea-card.reveal:nth-child(3) { transition-delay: 0.15s; }
+    .ideas .idea-card.reveal:nth-child(4) { transition-delay: 0.2s; }
+    .ideas .idea-card.reveal:nth-child(5) { transition-delay: 0.25s; }
+
+    header .reveal:nth-child(1) { transition-delay: 0s; }
+    header .reveal:nth-child(2) { transition-delay: 0.08s; }
+    header .reveal:nth-child(3) { transition-delay: 0.16s; }
+
+    .plan .day.reveal:nth-child(1) { transition-delay: 0.05s; }
+    .plan .day.reveal:nth-child(2) { transition-delay: 0.08s; }
+    .plan .day.reveal:nth-child(3) { transition-delay: 0.11s; }
+    .plan .day.reveal:nth-child(4) { transition-delay: 0.14s; }
+    .plan .day.reveal:nth-child(5) { transition-delay: 0.17s; }
+    .plan .day.reveal:nth-child(6) { transition-delay: 0.2s; }
+    .plan .day.reveal:nth-child(7) { transition-delay: 0.23s; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .idea-card {
@@ -120,12 +172,19 @@
       grid-template-columns: auto 1fr;
       gap: 16px;
       align-items: start;
-      transition: border-color 0.2s, transform 0.2s;
+      cursor: default;
+      transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
     }
 
     .idea-card:hover {
       border-color: rgba(255, 107, 74, 0.35);
-      transform: translateY(-2px);
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 12px 40px rgba(255, 107, 74, 0.12);
+    }
+
+    .idea-card:hover .idea-num {
+      transform: scale(1.1) rotate(-4deg);
+      background: rgba(255, 107, 74, 0.28);
     }
 
     .idea-num {
@@ -141,6 +200,12 @@
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.25s;
+    }
+
+    @keyframes pulse-badge {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255, 107, 74, 0); }
+      50% { box-shadow: 0 0 0 6px rgba(255, 107, 74, 0.08); }
     }
 
     .idea-card h3 {
@@ -164,6 +229,16 @@
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
+      transition: border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .day:hover {
+      border-color: rgba(124, 92, 255, 0.3);
+    }
+
+    .day.is-open {
+      box-shadow: 0 8px 32px rgba(124, 92, 255, 0.1);
+      border-color: rgba(124, 92, 255, 0.35);
     }
 
     .day-header {
@@ -172,7 +247,59 @@
       justify-content: space-between;
       padding: 16px 20px;
       background: var(--surface-2);
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid transparent;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.2s;
+    }
+
+    .day-header:hover {
+      background: #2a2a38;
+    }
+
+    .day.is-open .day-header {
+      border-bottom-color: var(--border);
+    }
+
+    .day-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      flex: 1;
+    }
+
+    .day-chevron {
+      color: var(--muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-left: 12px;
+      transition: transform 0.35s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.2s;
+    }
+
+    .day.is-open .day-chevron {
+      transform: rotate(180deg);
+      background: rgba(124, 92, 255, 0.2);
+    }
+
+    .day-body {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .day.is-open .day-body {
+      grid-template-rows: 1fr;
+    }
+
+    .day-body-inner {
+      overflow: hidden;
     }
 
     .day-label {
@@ -191,6 +318,11 @@
 
     .day ul {
       list-style: none;
+      padding: 0 20px;
+      transition: padding 0.35s ease;
+    }
+
+    .day.is-open ul {
       padding: 16px 20px 18px;
     }
 
@@ -200,7 +332,19 @@
       margin-bottom: 10px;
       font-size: 0.95rem;
       color: var(--text);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
+
+    .day.is-open li {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .day.is-open li:nth-child(1) { transition-delay: 0.05s; }
+    .day.is-open li:nth-child(2) { transition-delay: 0.1s; }
+    .day.is-open li:nth-child(3) { transition-delay: 0.15s; }
 
     .day li:last-child {
       margin-bottom: 0;
@@ -215,6 +359,23 @@
       height: 8px;
       border-radius: 50%;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .day li:hover::before {
+      transform: scale(1.35);
+      box-shadow: 0 0 10px rgba(124, 92, 255, 0.6);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+      .reveal { opacity: 1; transform: none; }
+      .day-body { grid-template-rows: 1fr !important; }
+      .day li { opacity: 1; transform: none; }
     }
 
     footer {
@@ -238,43 +399,43 @@
 
   <div class="wrap">
     <header>
-      <p class="badge">7 дней · реальный план</p>
-      <h1>Как привлечь аудиторию за одну неделю</h1>
-      <p class="subtitle">Пять рабочих идей и пошаговый контент-план — без «просто будь собой» и магии алгоритма.</p>
+      <p class="badge reveal">7 дней · реальный план</p>
+      <h1 class="reveal">Как привлечь аудиторию за одну неделю</h1>
+      <p class="subtitle reveal">Пять рабочих идей и пошаговый контент-план — без «просто будь собой» и магии алгоритма.</p>
     </header>
 
     <section aria-labelledby="ideas-heading">
-      <h2 id="ideas-heading"><span>💡</span> 5 идей для блогера</h2>
+      <h2 id="ideas-heading" class="reveal"><span>💡</span> 5 идей для блогера</h2>
       <div class="ideas">
-        <article class="idea-card">
+        <article class="idea-card reveal">
           <div class="idea-num">01</div>
           <div>
             <h3>Серия «7 дней — 7 инсайтов»</h3>
             <p>Каждый день один короткий пост с конкретным советом по вашей нише. Люди возвращаются за продолжением, а алгоритм видит стабильную активность.</p>
           </div>
         </article>
-        <article class="idea-card">
+        <article class="idea-card reveal">
           <div class="idea-num">02</div>
           <div>
             <h3>Коллаборация с микроблогером</h3>
             <p>Найдите автора с похожей аудиторией (5–50 тыс. подписчиков): совместный эфир, взаимный репост или челлендж. Охват удваивается без бюджета на рекламу.</p>
           </div>
         </article>
-        <article class="idea-card">
+        <article class="idea-card reveal">
           <div class="idea-num">03</div>
           <div>
             <h3>Интерактив: опрос + разбор ответов</h3>
             <p>Сторис или пост с вопросом «Что вам сложнее всего?» — на следующий день видео/пост с разбором топ-3 ответов. Аудитория чувствует, что её слышат.</p>
           </div>
         </article>
-        <article class="idea-card">
+        <article class="idea-card reveal">
           <div class="idea-num">04</div>
           <div>
             <h3>Лид-магнит за подписку</h3>
             <p>Чек-лист, шаблон или мини-гайд в обмен на email или подписку в Telegram. Один полезный файл — и вы собираете базу, а не только лайки.</p>
           </div>
         </article>
-        <article class="idea-card">
+        <article class="idea-card reveal">
           <div class="idea-num">05</div>
           <div>
             <h3>Живой эфир + нарезки</h3>
@@ -285,97 +446,177 @@
     </section>
 
     <section aria-labelledby="plan-heading">
-      <h2 id="plan-heading"><span>📅</span> Контент-план на 7 дней</h2>
+      <h2 id="plan-heading" class="reveal"><span>📅</span> Контент-план на 7 дней</h2>
       <div class="plan">
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 1 — Понедельник</span>
-            <span class="day-tag">Запуск серии</span>
+        <article class="day reveal is-open">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="true">
+            <div class="day-header-left">
+              <span class="day-label">День 1 — Понедельник</span>
+              <span class="day-tag">Запуск серии</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Пост-крючок: «7 дней — 7 способов [тема вашей ниши]»</li>
-            <li>Сторис: опрос «Какая тема вам важнее?» (2–3 варианта)</li>
-            <li>Ответить на 10–15 комментариев у коллег по нише — видимость</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Пост-крючок: «7 дней — 7 способов [тема вашей ниши]»</li>
+                <li>Сторис: опрос «Какая тема вам важнее?» (2–3 варианта)</li>
+                <li>Ответить на 10–15 комментариев у коллег по нише — видимость</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 2 — Вторник</span>
-            <span class="day-tag">Ценность</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 2 — Вторник</span>
+              <span class="day-tag">Ценность</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Пост №1 серии: один практический совет + пример</li>
-            <li>Короткое видео/Reels с тем же советом (30–60 сек)</li>
-            <li>Закрепить в профиле ссылку на лид-магнит (если готов)</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Пост №1 серии: один практический совет + пример</li>
+                <li>Короткое видео/Reels с тем же советом (30–60 сек)</li>
+                <li>Закрепить в профиле ссылку на лид-магнит (если готов)</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 3 — Среда</span>
-            <span class="day-tag">Вовлечение</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 3 — Среда</span>
+              <span class="day-tag">Вовлечение</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Пост №2 серии + карусель «до/после» или «ошибка → решение»</li>
-            <li>Сторис: вопрос «Что вам мешает больше всего?» — собрать ответы</li>
-            <li>Написать 3 микроблогерам с предложением коллаба (шаблон в DM)</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Пост №2 серии + карусель «до/после» или «ошибка → решение»</li>
+                <li>Сторис: вопрос «Что вам мешает больше всего?» — собрать ответы</li>
+                <li>Написать 3 микроблогерам с предложением коллаба (шаблон в DM)</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 4 — Четверг</span>
-            <span class="day-tag">Разбор</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 4 — Четверг</span>
+              <span class="day-tag">Разбор</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Пост: разбор топ-ответов из опроса (день 1 и 3)</li>
-            <li>Сторис: «спасибо за ответы» + тизер эфира завтра</li>
-            <li>Анонс лид-магнита: «Завтра в эфире разберу + дам чек-лист»</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Пост: разбор топ-ответов из опроса (день 1 и 3)</li>
+                <li>Сторис: «спасибо за ответы» + тизер эфира завтра</li>
+                <li>Анонс лид-магнита: «Завтра в эфире разберу + дам чек-лист»</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 5 — Пятница</span>
-            <span class="day-tag">Эфир</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 5 — Пятница</span>
+              <span class="day-tag">Эфир</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Живой эфир 30–45 мин: Q&A + презентация лид-магнита</li>
-            <li>Пост №3 серии — итоги первой половины недели</li>
-            <li>После эфира: пост «5 главных мыслей с эфира» + ссылка на запись</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Живой эфир 30–45 мин: Q&A + презентация лид-магнита</li>
+                <li>Пост №3 серии — итоги первой половины недели</li>
+                <li>После эфира: пост «5 главных мыслей с эфира» + ссылка на запись</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 6 — Суббота</span>
-            <span class="day-tag">Нарезки</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 6 — Суббота</span>
+              <span class="day-tag">Нарезки</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>3–5 коротких клипов с лучших моментов эфира</li>
-            <li>Пост №4 серии + призыв скачать лид-магнит</li>
-            <li>Репост/сторис коллаборатора (если договорились на среду)</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>3–5 коротких клипов с лучших моментов эфира</li>
+                <li>Пост №4 серии + призыв скачать лид-магнит</li>
+                <li>Репост/сторис коллаборатора (если договорились на среду)</li>
+              </ul>
+            </div>
+          </div>
         </article>
 
-        <article class="day">
-          <div class="day-header">
-            <span class="day-label">День 7 — Воскресенье</span>
-            <span class="day-tag">Итоги</span>
+        <article class="day reveal">
+          <div class="day-header" role="button" tabindex="0" aria-expanded="false">
+            <div class="day-header-left">
+              <span class="day-label">День 7 — Воскресенье</span>
+              <span class="day-tag">Итоги</span>
+            </div>
+            <span class="day-chevron" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5L7 9L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
           </div>
-          <ul>
-            <li>Пост №5–7 серии: финальный совет + «что дальше»</li>
-            <li>Итоговый пост: цифры недели (охват, подписки, отклики) — честно</li>
-            <li>Сторис: «Спасибо за неделю» + опрос «О чём писать дальше?»</li>
-          </ul>
+          <div class="day-body">
+            <div class="day-body-inner">
+              <ul>
+                <li>Пост №5–7 серии: финальный совет + «что дальше»</li>
+                <li>Итоговый пост: цифры недели (охват, подписки, отклики) — честно</li>
+                <li>Сторис: «Спасибо за неделю» + опрос «О чём писать дальше?»</li>
+              </ul>
+            </div>
+          </div>
         </article>
       </div>
     </section>
 
-    <footer>
+    <footer class="reveal">
       Открой <code style="color: var(--accent);">index.html</code> в браузере — и вперёд, пока мотивация не ушла пить кофе.
     </footer>
   </div>
+
+  <script>
+    const reveals = document.querySelectorAll(".reveal");
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+    );
+    reveals.forEach((el) => observer.observe(el));
+
+    document.querySelectorAll(".day").forEach((day) => {
+      const header = day.querySelector(".day-header");
+      const toggle = () => {
+        const open = day.classList.toggle("is-open");
+        header.setAttribute("aria-expanded", open);
+      };
+      header.addEventListener("click", toggle);
+      header.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      });
+    });
+  </script>
 </body>
 </html>
